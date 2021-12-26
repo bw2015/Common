@@ -1,0 +1,4 @@
+[hook "startcommit"]
+	cmdline = F:\\Project\\WebStudio\\js\\min.bat
+	wait = true
+	show = false

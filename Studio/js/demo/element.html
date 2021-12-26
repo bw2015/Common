@@ -1,0 +1,43 @@
+<html>
+    <title>Element测试</title>
+    <head>
+        <script src="../native.core.js"></script>
+        <script src="../native.prototype.element.js"></script>
+    </head>
+    <body>
+        <fieldset id="parentContainer">
+            <legend>获取父级</legend>
+            <button id="parent">获取父级资料</button>
+            <button class="parent">父级事件</button>
+        </fieldset>
+        
+        <script>
+            document.getElementById("parent").addEvent("click",e=>{
+                let parent = e.current.getParent("fieldset");
+                console.log("单个事件",parent,e);
+            });
+
+            document.getElementById("parentContainer").addEvent("click",".parent",e=>{
+                console.log("父级.parent条件",e);
+            });
+
+            document.getElementById("parentContainer").addEvent("click","#parent",e=>{
+                console.log("父级#parent条件",e);
+            });
+
+            document.getElementById("parentContainer").addEvents({
+                "mouseover":e=>{ console.log(e.type,e); },
+                "mouseout":e=>{ console.log(e.type,e); },
+                "mousemove":e=>{ console.log(e.type,e); }
+            });
+
+            !function(elem){
+                console.log(
+                    elem.setData("test",new Date()),
+                    elem.getData("test")
+                );
+            }(document.getElementById("parent"));
+        </script>
+        
+    </body>
+</html>

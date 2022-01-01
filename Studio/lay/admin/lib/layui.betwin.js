@@ -981,6 +981,7 @@
                                 uploadIndex = layer.load(10, { time: 10 * 1000 });
                             }
                             , done: function (res) {
+                                res = form.config.upload.parse && form.config.upload.parse(res) || res;
                                 elem.attr("disabled", false);
                                 layer.close(uploadIndex);
                                 if (res.code !== 0) {

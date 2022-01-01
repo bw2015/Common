@@ -323,14 +323,15 @@ if (!window["Utils"]) window["Utils"] = new Object();
     };
 
     // 封装JSON的视图显示
+    // 封装JSON的视图显示
     ns["jsonViewer"] = function (elemId, json) {
         if (!window["jQuery"]) window["jQuery"] = layui.$;
         var elem = jQuery("#" + elemId);
-        layui.link("/studio/js/jquery.json-viewer.css");
+        layui.link("//studio.a8.to/plus-in/json-viewer/jquery.json-viewer.css");
         if (elem.jsonViewer) {
             elem.jsonViewer(json);
         } else {
-            jQuery.getScript("/studio/js/jquery.json-viewer.js", function () {
+            jQuery.getScript("//studio.a8.to/plus-in/json-viewer/jquery.json-viewer.js", function () {
                 elem.jsonViewer(json);
             });
         }

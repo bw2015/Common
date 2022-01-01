@@ -135,3 +135,22 @@ layui.use(["table"], function () {
     };
     ghost();
 }();
+
+// 系统工具
+!function (ns) {
+
+    // 封装JSON的视图显示
+    ns["jsonViewer"] = function (elemId, json) {
+        if (!window["jQuery"]) window["jQuery"] = layui.$;
+        var elem = jQuery("#" + elemId);
+        layui.link("//studio.a8.to/plus-in/json-viewer/jquery.json-viewer.css");
+        if (elem.jsonViewer) {
+            elem.jsonViewer(json);
+        } else {
+            jQuery.getScript("//studio.a8.to/plus-in/json-viewer/jquery.json-viewer.js", function () {
+                elem.jsonViewer(json);
+            });
+        }
+    };
+
+}(Utils);

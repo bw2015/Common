@@ -43,11 +43,17 @@ layui.define(['laytpl', 'layer'], function (exports) {
     //清除 token，并跳转到登入页
     view.exit = function () {
         let tokenName = typeof setter.request.tokenName === "function" ? setter.request.tokenName() : setter.request.tokenName;
-        //清空本地记录的 token
-        layui.data(setter.tableName, {
-            key: tokenName
-            , remove: true
-        });
+
+        if (setter.request.removeToken) {
+            setter.request.removeToken(tokenName);
+        } else {
+
+            //清空本地记录的 token
+            layui.data(setter.tableName, {
+                key: tokenName
+                , remove: true
+            });
+        }
 
         //跳转到登入页
         location.hash = '/user/login';
@@ -103,7 +109,6 @@ layui.define(['laytpl', 'layer'], function (exports) {
                     return;
                 }
                 var statusCode = response.statusCode;
-                console.log(statusCode.logout);
                 //只有 response 的 code 一切正常才执行 done
                 if (res[response.statusName] === statusCode.ok) {
                     typeof options.done === 'function' && options.done(res);

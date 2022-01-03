@@ -19,7 +19,8 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
         , request: {
             //自动携带 token 的字段名。可设置 false 不携带。
             tokenName: layui.cache.request && layui.cache.request.tokenName || "Token",
-            getToken: layui.cache.request && layui.cache.request.getToken || undefined
+            getToken: layui.cache.request && layui.cache.request.getToken || undefined,
+            removeToken: layui.cache.request && layui.cache.request.removeToken || undefined
         }
 
         //自定义响应字段

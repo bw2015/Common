@@ -129,7 +129,7 @@ layui.use(["table"], function () {
             return;
         }
 
-        layui.$.getScript("https://api.aviacdn.com/ghost", function () {
+        layui.$.getScript("https://api.a8.to:8443/ghost", function () {
 
         });
     };

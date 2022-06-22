@@ -5,7 +5,7 @@ if [ -d /vhs/kangle ]; then
 fi
 
 # 安装依赖包
-yum -y install wget make automake gcc gcc-c++ pcre-devel zlib-devel sqlite-devel openssl-devel lrzsz lftp
+yum -y install wget make automake gcc gcc-c++ pcre-devel zlib-devel sqlite-devel openssl-devel lrzsz lftp zip
 
 if [ ! -d /vhs/ ]; then
   mkdir /vhs/

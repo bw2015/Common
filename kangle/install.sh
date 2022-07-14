@@ -5,14 +5,14 @@ if [ -d /vhs/kangle ]; then
 fi
 
 # 安装依赖包
-yum -y install wget make automake gcc gcc-c++ pcre-devel zlib-devel sqlite-devel openssl-devel lrzsz lftp
+yum -y install wget make automake gcc gcc-c++ pcre-devel zlib-devel sqlite-devel openssl-devel lrzsz lftp zip
 
 if [ ! -d /vhs/ ]; then
   mkdir /vhs/
 fi
 
 cd /vhs/
-wget https://raw.githubusercontent.com/bw2015/WebTools/main/Studio/download/kangle-3.5.21.4.zip
+wget https://github.com/bw2015/Common/raw/main/kangle/kangle-3.5.21.4.zip
 unzip kangle-3.5.21.4.zip
 rm -rf kangle-3.5.21.4.zip
 

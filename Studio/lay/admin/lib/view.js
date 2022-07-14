@@ -92,11 +92,21 @@ layui.define(['laytpl', 'layer'], function (exports) {
             } else {
                 options.headers[tokenName] = layui.data(setter.tableName)[tokenName] || '';
             }
-
         }
 
         delete options.success;
         delete options.error;
+
+        if(layui.setter.getUrl) options.url = layui.setter.getUrl(options.url);
+
+        if(layui.setter.request && layui.setter.request.type === "json"){
+            options.headers["Content-Type"] = "application/json";
+            if(options.data) options.data = JSON.stringify(options.data);
+        }
+
+        if(layui.setter.language){
+            options.headers["Language"] = layui.setter.language
+        }
 
         return $.ajax($.extend({
             type: 'post'

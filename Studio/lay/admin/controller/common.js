@@ -19,7 +19,7 @@ layui.define(function (exports) {
     admin.events.logout = function () {
         //执行退出接口
         admin.req({
-            url: '/manage/account/Logout',
+            url: '/Admin/Logout',
             success: function (res) {
                 if (res.success) {
                     //清空本地记录的 token，并跳转到登入页
@@ -59,7 +59,7 @@ layui.define(function (exports) {
             $.ajaxSetup({
                 cache: true
             });
-            $.getScript("//studio.racdn.com/js/sp/avatar.js", avatar);
+            $.getScript("//studio.a8.to/js/sp/avatar.js", avatar);
         }
     };
 

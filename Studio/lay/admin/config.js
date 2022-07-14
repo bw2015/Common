@@ -1,16 +1,17 @@
 layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
     exports('setter', {
-        container: 'LAY_app' //容器ID
+        // 语言
+        language : layui.cache.language || "CHN"
+        , container: 'LAY_app' //容器ID
         , base: layui.cache.base //记录layuiAdmin文件夹所在路径
         , views: layui.cache.views || (layui.cache.base + 'views/') //视图所在目录
         , entry: 'index' //默认视图文件名
         , engine: '.html' //视图文件后缀名
         , pageTabs: true //是否开启页面选项卡功能。单页面专业版不推荐开启
-
-        , name: 'layuiAdmin'
+        , name: layui.cache.name || 'layuiAdmin'
         , tableName: layui.cache.tableName || 'layuiAdmin' //本地存储表名
         , MOD_NAME: 'admin' //模块事件名
-
+        , getUrl : layui.cache.getUrl || function(url){ return url; }
         , debug: true //是否开启调试模式。如开启，接口异常时会抛出异常 URL 等信息
 
         , interceptor: false //是否开启未登入拦截
@@ -20,7 +21,9 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
             //自动携带 token 的字段名。可设置 false 不携带。
             tokenName: layui.cache.request && layui.cache.request.tokenName || "Token",
             getToken: layui.cache.request && layui.cache.request.getToken || undefined,
-            removeToken: layui.cache.request && layui.cache.request.removeToken || undefined
+            removeToken: layui.cache.request && layui.cache.request.removeToken || undefined,
+            // 提交的类型（如果为json则使用JSON格式提交）
+            type : layui.cache.request && layui.cache.request.type || undefined      
         }
 
         //自定义响应字段
@@ -30,7 +33,6 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
                 ok: 1 //数据状态一切正常的状态码
                 , faild: 0
                 , logout: function (res) {
-                    console.log(res);
                     return !res.success && res.info && (res.info.Error === "Login" || res.info.ErrorType === "Login" || res.info.ErrorType === "Authorization");
                 }//登录状态失效的状态码
             }

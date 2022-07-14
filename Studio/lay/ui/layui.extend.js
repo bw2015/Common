@@ -153,4 +153,23 @@ layui.use(["table"], function () {
         }
     };
 
+    // 赋值字符串内容
+    // tip: 是否自定义复制成功的内容
+    ns.Copy = (msg, tip) => {
+        let textarea = document.createElement('textarea');
+        document.body.appendChild(textarea);
+        textarea.style.position = 'fixed';
+        textarea.style.clip = 'rect(0 0 0 0)';
+        textarea.style.top = '10px';
+        textarea.value = msg;
+        textarea.select();
+        document.execCommand('copy', true);
+        if (!tip) {
+            layer.msg(`复制成功`);
+        }
+        setTimeout(() => {
+            textarea.remove();
+        }, 1000);
+    };
+
 }(Utils);

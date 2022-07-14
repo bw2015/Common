@@ -976,6 +976,7 @@
                             , accept: options.accept
                             , headers: headers
                             , exts: defaultExts
+                            , choose: options.choose
                             , before: function (obj) {
                                 elem.attr("disabled", true);
                                 uploadIndex = layer.load(10, { time: 10 * 1000 });
@@ -985,6 +986,7 @@
                                 elem.attr("disabled", false);
                                 layer.close(uploadIndex);
                                 if (res.code !== 0) {
+                                    console.log(res.code);
                                     layer.msg(res.msg, { icon: 2 });
                                     return;
                                 }

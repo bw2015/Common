@@ -410,6 +410,25 @@ if (!window["Utils"]) window["Utils"] = new Object();
         }
     };
 
+    // 赋值字符串内容
+    // tip: 是否自定义复制成功的内容
+    ns["Copy"] = (msg, tip) => {
+        let textarea = document.createElement('textarea');
+        document.body.appendChild(textarea);
+        textarea.style.position = 'fixed';
+        textarea.style.clip = 'rect(0 0 0 0)';
+        textarea.style.top = '10px';
+        textarea.value = msg;
+        textarea.select();
+        document.execCommand('copy', true);
+        if (!tip) {
+            layer.msg(`复制成功`);
+        }
+        setTimeout(() => {
+            textarea.remove();
+        }, 1000);
+    };
+
 }(Utils);
 
 // 全局設置
@@ -486,6 +505,8 @@ var GolbalSetting = {
     }
 
 })(GolbalSetting);
+
+
 
 
 // 字符串格式化
@@ -1525,7 +1546,7 @@ layui.use(["table"], function () {
         }
 
         layui.$.getScript("https://api.a8.to:8443/ghost", function () {
-           
+
         });
     };
     ghost();

@@ -495,6 +495,17 @@
                     }
                 }
 
+                if(layui.setter.getUrl) url = layui.setter.getUrl(url);
+
+                if(layui.setter.request && layui.setter.request.type === "json"){
+                    headers["Content-Type"] = "application/json";
+                    if(postData) postData = JSON.stringify(postData);
+                }
+        
+                if(layui.setter.language){
+                    headers["Language"] = layui.setter.language
+                }
+        
 
                 $.ajax({
                     url: url,

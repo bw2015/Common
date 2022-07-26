@@ -466,7 +466,7 @@
             if (!data) data = function (e) { return e; };
             form.on("submit(" + filter + ")", function (e) {
                 let formObj = e.form,
-                    postData = data.apply(formObj, [e.field]);
+                    postData = data.apply(formObj, [e.field,formObj]);
                 if (postData === false) return false;
                 let index = layer.load(2, { time: 3000 }),
                     popId = $(formObj).parents("[times]").attr("times"),
@@ -594,8 +594,8 @@
         },
         // 扩展的渲染方法
         render: function (filter) {
-            var formElem = document.querySelector(".layui-form[lay-filter=" + filter + "]");
-            var formObj = $(formElem);
+            const formElem = document.querySelector(`.layui-form[lay-filter='${filter}']`),
+                  formObj = $(formElem);
 
             // 从search对象传递过来的默认值赋值
             !function () {
@@ -1171,13 +1171,16 @@
     };
 
     betwin.admin = {
-        popup: function (id) {
-            var page = $(id);
+        popup: function (id,options) {
+            let page = $(id);
+            if(!options) options = {};
+            
             page.on("click", "[data-popup]", function (e) {
-                var obj = this;
-                var url = obj.getAttribute("data-popup");
-                var data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data")));
-                var title = obj.getAttribute("data-title");
+                const obj = this,
+                    url = obj.getAttribute("data-popup"),
+                    data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data"))),
+                    title = obj.getAttribute("data-title");
+                console.log(data);
                 admin.popup({
                     id: "popup-" + new Date().getTime(),
                     title: title === "false" ? false : title || obj.innerText,
@@ -1190,11 +1193,12 @@
                     }
                 });
             });
+            
             page.on("click", "[data-action]", function (e) {
-                var obj = this;
-                var url = obj.getAttribute("data-action");
-                var data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data")));
-                var callback = obj.getAttribute("data-callback");
+                const obj = this,
+                 url = obj.getAttribute("data-action"),
+                 data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data"))),
+                 callback = obj.getAttribute("data-callback");
                 betwin.admin.req({
                     url: url,
                     data: data,
@@ -1213,6 +1217,14 @@
                         }
                     }
                 });
+            });
+
+            // 设定初始值
+            page[0].querySelectorAll("[data-popup],[data-action]").forEach(btn=>{
+                if(options.data){
+                    if(btn.getAttribute("data-data")) return;
+                    btn.setAttribute("data-data",encodeURI(JSON.stringify(options.data)));
+                }    
             });
         },
         open: function (obj) {

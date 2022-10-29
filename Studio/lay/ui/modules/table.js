@@ -702,9 +702,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
             params[request.limitName] = options.limit;
 
             //参数
-            var data = $.extend(params, options.where);
+            var data = null;
             if (options.contentType && options.contentType.indexOf("application/json") == 0) { //提交 json 格式
-                data = JSON.stringify(data);
+                params["where"] = options.where;
+                data = JSON.stringify(params);
+            }else{
+                data = $.extend(params, options.where);
             }
 
             that.loading();

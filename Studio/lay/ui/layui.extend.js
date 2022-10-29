@@ -172,4 +172,17 @@ layui.use(["table"], function () {
         }, 1000);
     };
 
+    ns.getBank = (cardNo, options) => {
+        let $ = layui.$;
+        if (!options) options = {};
+        $.ajax({
+            url: `https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo=${cardNo}&cardBinCheck=true`,
+            method: "GET",
+            success: res => {
+                
+                console.log(res);
+            }
+        });
+    };
+
 }(Utils);

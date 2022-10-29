@@ -9,11 +9,11 @@
 
 layui.extend({
     setter: 'config' //配置文件
-        ,
+    ,
     admin: 'lib/admin' //核心模块
-        ,
+    ,
     view: 'lib/view' //核心模块
-        ,
+    ,
     betwin: "lib/layui.betwin",
 }).define(['setter', 'admin', 'betwin'], function (exports) {
     var setter = layui.setter,
@@ -143,7 +143,7 @@ layui.extend({
             var router = layui.router(),
                 container = view(setter.container),
                 pathURL = admin.correctRouter(router.path.join('/')),
-                isIndPage;
+                isIndPage, isLayout, layoutBase, layoutType;
 
             //检查是否属于独立页面
             layui.each(setter.indPage, function (index, item) {
@@ -151,16 +151,40 @@ layui.extend({
                     return isIndPage = true;
                 }
             });
+
+            setter.layout.forEach(item => {
+                let regex = new RegExp(`^${item}`);
+                if (regex.test(pathURL)) {
+                    layoutBase = item;
+                    return isLayout = true;
+                }
+            });
+
             //将模块根路径设置为 controller 目录
             layui.config({
                 base: setter.base + 'controller/'
             });
             //独立页面
-            if (isIndPage || pathURL === '/user/login') { //此处单独判断登入页，是为了兼容旧版（即未在 config.js 配置 indPage 的情况）
+            if (isIndPage) { //此处单独判断登入页
                 container.render(router.path.join('/')).done(function () {
                     admin.pageType = 'alone';
                 });
-            } else { //后台框架页面
+                layoutType = null;
+            }
+            //  独立框架页面
+            else if (isLayout) {
+                if (layoutType === layoutBase) {
+                    view("LAY_app_body").render(router.path.join('/'));
+                } else {
+                    container.render(`${layoutBase}layout`).done(() => {
+                        view("LAY_app_body").render(router.path.join('/'));
+                        layoutType = layoutBase;
+                    });
+                }
+            }
+            else { //后台框架页面
+
+                layoutType = null;
 
                 //强制拦截未登入
                 if (setter.interceptor) {

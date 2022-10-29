@@ -820,11 +820,23 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
 
 // 字符串擴展
 !function () {
-    String.prototype.toQRCode = function (width, height) {
-        if (!width) width = 220;
-        if (!height) height = 220;
-        var content = this;
-        return "https://api.a8.to:8443/qrcode?content=" + encodeURIComponent(content);
+    String.prototype.toQRCode = function (options) {
+        if (!options) options = {};
+        let width = options.width || 220,
+            height = options.height || 220,
+            content = this;
+
+        if (!options.elem) return "https://api.a8.to:8443/qrcode?content=" + encodeURIComponent(content);
+
+        let showCode = () => {
+            new QRCode(options.elem, content);
+        };
+
+        if (window["QRCode"]) {
+            showCode();
+        } else {
+            layui.$.getScript("//studio/js/qrcode/qrcode.min.js", showCode);
+        }
     };
 
     // 从ID中直接获取内容

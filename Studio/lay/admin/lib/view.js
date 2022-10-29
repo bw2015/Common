@@ -94,17 +94,24 @@ layui.define(['laytpl', 'layer'], function (exports) {
             }
         }
 
+        if (setter.request.headers) {
+            let headers = setter.request.headers();
+            for (let key in headers) {
+                options.headers[key] = headers[key];
+            }
+        }
+
         delete options.success;
         delete options.error;
 
-        if(layui.setter.getUrl) options.url = layui.setter.getUrl(options.url);
+        if (layui.setter.getUrl) options.url = layui.setter.getUrl(options.url);
 
-        if(layui.setter.request && layui.setter.request.type === "json"){
+        if (layui.setter.request && layui.setter.request.type === "json") {
             options.headers["Content-Type"] = "application/json";
-            if(options.data) options.data = JSON.stringify(options.data);
+            if (options.data) options.data = JSON.stringify(options.data);
         }
 
-        if(layui.setter.language){
+        if (layui.setter.language) {
             options.headers["Language"] = layui.setter.language
         }
 
@@ -127,9 +134,12 @@ layui.define(['laytpl', 'layer'], function (exports) {
                 else if (statusCode.logout(res)) {
                     view.exit();
                 }
-
                 else if (res[response.statusName] === statusCode.faild) {
                     if (!success) layer.alert(res[response.msg], { icon: 2 });
+
+                    if (res.info && res.info.ErrorType && window["GolbalSetting"] && window["GolbalSetting"]["ErrorType"] && window["GolbalSetting"]["ErrorType"][res.info.ErrorType]) {
+                        window["GolbalSetting"]["ErrorType"][res.info.ErrorType](res);
+                    }
                 }
                 //其它异常
                 else {

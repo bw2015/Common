@@ -31,10 +31,29 @@ layui.define(function (exports) {
 
     // 修改头像
     admin.events.avatar = function () {
+        let elem = this;            
         var avatar = function () {
+            let saveUrl = elem.getAttribute("data-save") || "/manage/account/SaveFace";
             SP.Avatar({
                 url: form.config.upload.url,
+                before: xhr => {
+                    if (layui.setter.request.headers) {
+                        let headers = layui.setter.request.headers();
+                        for (let key in headers) {
+                            xhr.setRequestHeader(key, headers[key]);
+                        }
+                    }
+                    let tokenName = layui.setter.request.tokenName;
+                    if (layui.setter.request.getToken && typeof layui.setter.request.getToken === "function") {
+                        xhr.setRequestHeader(tokenName, layui.setter.request.getToken(tokenName));
+                    } else {
+                        xhr.setRequestHeader(tokenName, layui.data(layui.setter.tableName)[tokenName] || '');
+                    }
+                },
                 callback: function (res) {
+                    if (layui.form.config.upload.parse) {
+                        res = layui.form.config.upload.parse(res);
+                    }
                     if (res.code !== 0) {
                         layer.msg(res.msg, {
                             icon: 2
@@ -44,9 +63,11 @@ layui.define(function (exports) {
                     layer.msg("头像修改成功", {
                         icon: 1
                     });
-                    document.getElementById("layout-face").src = res.data.src;
+                    if (document.getElementById("layout-face")) {
+                        document.getElementById("layout-face").src = res.data.src;
+                    }
                     admin.req({
-                        url: "/manage/account/SaveFace",
+                        url: saveUrl,
                         data: res.data
                     });
                 }

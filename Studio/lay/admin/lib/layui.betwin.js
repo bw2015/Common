@@ -466,7 +466,7 @@
             if (!data) data = function (e) { return e; };
             form.on("submit(" + filter + ")", function (e) {
                 let formObj = e.form,
-                    postData = data.apply(formObj, [e.field,formObj]);
+                    postData = data.apply(formObj, [e.field, formObj]);
                 if (postData === false) return false;
                 let index = layer.load(2, { time: 3000 }),
                     popId = $(formObj).parents("[times]").attr("times"),
@@ -495,17 +495,25 @@
                     }
                 }
 
-                if(layui.setter.getUrl) url = layui.setter.getUrl(url);
+                if (layui.setter.getUrl) url = layui.setter.getUrl(url);
 
-                if(layui.setter.request && layui.setter.request.type === "json"){
+                if (layui.setter.request && layui.setter.request.type === "json") {
                     headers["Content-Type"] = "application/json";
-                    if(postData) postData = JSON.stringify(postData);
+                    if (postData) postData = JSON.stringify(postData);
+                } else {
+                    headers["Content-Type"] = "application/x-www-form-urlencoded";
                 }
-        
-                if(layui.setter.language){
+
+                if (layui.setter.language) {
                     headers["Language"] = layui.setter.language
                 }
-        
+
+                if (layui.setter.request && layui.setter.request.headers) {
+                    let data = layui.setter.request.headers();
+                    for (let key in data) {
+                        headers[key] = data[key];
+                    }
+                }
 
                 $.ajax({
                     url: url,
@@ -595,7 +603,7 @@
         // 扩展的渲染方法
         render: function (filter) {
             const formElem = document.querySelector(`.layui-form[lay-filter='${filter}']`),
-                  formObj = $(formElem);
+                formObj = $(formElem);
 
             // 从search对象传递过来的默认值赋值
             !function () {
@@ -662,6 +670,18 @@
                                     break;
                                 case "datetime":
                                     value = new Date().formatDate("yyyy-MM-dd 00:00:00");
+                                    break;
+                            }
+                            item.value = value;
+                            break;
+                        case "now":
+                            var value = "";
+                            switch (type) {
+                                case "date":
+                                    value = new Date().formatDate("yyyy-MM-dd");
+                                    break;
+                                case "datetime":
+                                    value = new Date().formatDate("yyyy-MM-dd HH:mm:ss");
                                     break;
                             }
                             item.value = value;
@@ -979,6 +999,13 @@
                         if (options.headers) {
                             headers = $.extend(headers, options.headers);
                         }
+                        if (layui.setter.request && layui.setter.request.headers) {
+                            let data = layui.setter.request.headers();
+                            for (let key in data) {
+                                headers[key] = data[key];
+                            }
+                        }
+
                         var uploadIndex;
                         var uploadInst = upload.render({
                             elem: elem //绑定元素
@@ -1171,16 +1198,15 @@
     };
 
     betwin.admin = {
-        popup: function (id,options) {
+        popup: function (id, options) {
             let page = $(id);
-            if(!options) options = {};
-            
+            if (!options) options = {};
+
             page.on("click", "[data-popup]", function (e) {
                 const obj = this,
                     url = obj.getAttribute("data-popup"),
                     data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data"))),
                     title = obj.getAttribute("data-title");
-                console.log(data);
                 admin.popup({
                     id: "popup-" + new Date().getTime(),
                     title: title === "false" ? false : title || obj.innerText,
@@ -1193,12 +1219,12 @@
                     }
                 });
             });
-            
+
             page.on("click", "[data-action]", function (e) {
                 const obj = this,
-                 url = obj.getAttribute("data-action"),
-                 data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data"))),
-                 callback = obj.getAttribute("data-callback");
+                    url = obj.getAttribute("data-action"),
+                    data = obj.getAttribute("data-data") === null ? {} : JSON.parse(decodeURI(obj.getAttribute("data-data"))),
+                    callback = obj.getAttribute("data-callback");
                 betwin.admin.req({
                     url: url,
                     data: data,
@@ -1220,11 +1246,11 @@
             });
 
             // 设定初始值
-            page[0].querySelectorAll("[data-popup],[data-action]").forEach(btn=>{
-                if(options.data){
-                    if(btn.getAttribute("data-data")) return;
-                    btn.setAttribute("data-data",encodeURI(JSON.stringify(options.data)));
-                }    
+            page[0].querySelectorAll("[data-popup],[data-action]").forEach(btn => {
+                if (options.data) {
+                    if (btn.getAttribute("data-data")) return;
+                    btn.setAttribute("data-data", encodeURI(JSON.stringify(options.data)));
+                }
             });
         },
         open: function (obj) {

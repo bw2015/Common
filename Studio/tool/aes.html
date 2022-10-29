@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>AES 加密解密</title>
+    <link href="../lay/ui/css/layui.css" rel="stylesheet" />
+    <link href="../lay/ui/css/layui.extend.css" rel="stylesheet" />
+    <script src="../lay/ui/layui.js"></script>
+    <style type="text/css">
+        fieldset { max-width: 640px; margin: auto; display: block; }
+    </style>
+</head>
+<body>
+    <fieldset>
+        <legend>加密</legend>
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">原文：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Source" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密钥：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Key" class="layui-input" id="key-Encrypt" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密文：</label>
+                <div class="layui-input-block">
+                    <input type="text" readonly id="Encrypt-source" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button type="button" class="layui-btn layui-btn-block" lay-submit lay-filter="Encrypt">加密</button>
+            </div>
+        </form>
+    </fieldset>
+    <hr />
+
+    <fieldset>
+        <legend>解密</legend>
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">密文：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Source" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密钥：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Key" class="layui-input" id="key-Decrypt" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原文：</label>
+                <div class="layui-input-block">
+                    <input type="text" readonly id="Decrypt-source" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button type="button" class="layui-btn layui-btn-block" lay-submit lay-filter="Decrypt">解密</button>
+            </div>
+        </form>
+    </fieldset>
+
+    <script type="text/javascript">
+        layui.use(["form"], () => {
+            const form = layui.form,
+                $ = layui.$;
+
+            let getKey = type => {
+                return `TOOL:${type}:KEY`;
+            };
+
+            ["Encrypt", "Decrypt"].forEach(type => {
+                let key = getKey(type),
+                    value = localStorage.getItem(key);
+                if (value) document.getElementById(`key-${type}`).value = value;
+            });
+
+            let execute = type => {
+                form.on(`submit(${type})`, e => {
+                    let loadIndex = 0;
+                    if (e.field["Key"]) {
+                        localStorage.setItem(getKey(type), e.field["Key"]);
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: `//api.a8.to/AutoCode/Aes${type}`,
+                        data: e.field,
+                        beforeSend: xhr => {
+                            loadIndex = layer.load(2, { time: 3000 });
+                        },
+                        complete: xhr => {
+                            layer.close(loadIndex);
+                        },
+                        success: res => {
+                            document.getElementById(`${type}-source`).value = res.info.str || res.msg;
+                        }
+                    });
+                });
+            };
+
+            execute("Encrypt");
+            execute("Decrypt");
+        })
+    </script>
+</body>
+</html>

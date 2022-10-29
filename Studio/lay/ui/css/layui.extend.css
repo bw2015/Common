@@ -35,7 +35,7 @@ hr.xs { margin: 2px 0px; }
 .layui-form-block.text,
 layui-form-inline.text { padding: 9px 15px; line-height: 20px; }
 
-input[type=image].layui-input-upload { height: 42px; border: 1px solid #ccc; border-radius: 4px; }
+input[type=image].layui-input-upload { max-height: 42px; border: 1px solid #ccc; border-radius: 4px; vertical-align: middle; }
 
 .layui-form .layui-form-item.hide { display: none; }
 .layui-form .layui-input.layui-input-transparent,
@@ -258,3 +258,6 @@ p.layui-btn-group { display: block; }
 
 /* 表格组件不自动隐藏多出内容　*/
 .layui-table-break + .layui-table-view .layui-table-cell { white-space: normal; }
+
+/* 弹出框 */
+.layui-layer .layui-layer-content .layui-fluid { padding: 0px; }

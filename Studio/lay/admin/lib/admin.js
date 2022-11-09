@@ -534,7 +534,10 @@ layui.define('view', function (exports) {
 
     // 自定义的layout布局
     admin.on("hash(layout)", function (router) {
-        console.log("自定义的事件layout布局触发");
+        console.log("自定义的事件layout布局触发", router);
+        //#1 判断当前是否已经加载了自定义的layout
+
+
     });
 
     //监听侧边导航点击事件

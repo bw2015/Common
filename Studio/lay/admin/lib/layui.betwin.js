@@ -741,7 +741,7 @@
                 var buttonClass = "layui-btn" + (formObj.hasClass("layui-form-sm") ? " layui-btn-sm" : "");
                 layui.each(list, function (index, item) {
                     if (!filter || filter.contains(item.type)) {
-                        dataPeriod.append($("<button type='button' class='" + buttonClass + "' lay-period data-startat='" + item.startat + "' data-endat='" + item.endat + "'>" + item.name + "</button>"));
+                        dataPeriod.append($("<button type='button' class='" + buttonClass + " layui-btn-primary' lay-period data-startat='" + item.startat + "' data-endat='" + item.endat + "'>" + item.name + "</button>"));
                     }
                 });
 

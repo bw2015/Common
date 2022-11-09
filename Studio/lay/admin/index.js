@@ -20,11 +20,11 @@ layui.extend({
         element = layui.element,
         admin = layui.admin,
         tabsPage = admin.tabsPage,
-        view = layui.view
+        view = layui.view,
 
         //根据路由渲染页面
-        ,
-        renderPage = function () {
+        // containerId : 指定的容器ID（来自自定义的layout）
+        renderPage = function (containerId) {
             var router = layui.router(),
                 path = router.path,
                 pathURL = admin.correctRouter(router.path.join('/'))
@@ -74,7 +74,7 @@ layui.extend({
 
             //请求视图渲染
 
-            view(APP_BODY_ID).render(path.join('/')).then(function (res) {
+            view(containerId || APP_BODY_ID).render(path.join('/')).then(function (res) {
 
                 //遍历页签选项卡
                 var matchTo, tabs = $('#LAY_app_tabsheader>li');
@@ -185,30 +185,31 @@ layui.extend({
                     }
                 }
 
-                //渲染后台结构
-                if (admin.pageType === 'console') { //后台主体页
+                // 如果是在已经加载好的自定义layout中跳转
+                if (admin.pageType === "layout" && layout) {
+                    renderPage(layout.container);
+                }
+                // 不在已经加载好的自定义layout中跳转
+                else if (admin.pageType === 'console' && !layout) { 
                     renderPage();
-                } else { //初始控制台结构
-                    let done = () => {
-                        console.log("触发done事件", APP_BODY_ID);
+                }
+                // 后台主体页
+                else if (layout) {
+                    container.render('layout').done(() => {
+                        view().render(layout.path).done(() => {
+                            renderPage(layout.container);
+                            layui.element.render();
+                            admin.pageType = "layout";
+                        });
+                    });
+                } else {
+                    container.render('layout').done(() => {
                         renderPage();
                         layui.element.render();
-
                         if (admin.screen() < 2) {
                             admin.sideFlexible();
                         }
                         admin.pageType = 'console';
-                    };
-                    container.render('layout').done(function () {
-                        if (layout) {
-                            view().render(layout.path).then(() => {
-                                APP_BODY_ID = layout.container;
-                                console.log("触发then事件", APP_BODY_ID);
-                            }).done(done);
-                        } else {
-                            APP_BODY_ID = "LAY_app_body";
-                            done();
-                        }
                     });
                 }
 

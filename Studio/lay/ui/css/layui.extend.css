@@ -134,7 +134,6 @@ input[type=checkbox][lay-size='sm'] ~ .layui-form-checkbox { height: 20px; line-
 .layui-text-gray { color: #cccccc !important; }
 .layui-text-cyan { color: #2F4056 !important; }
 .layui-text-white { color: #fff !important; }
-.layui-bg-gray { background-color: #cccccc; }
 .layui-bg-white { background-color: #fff; }
 .layui-bg-black { background-color: #333; }
 

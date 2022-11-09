@@ -41,25 +41,19 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
             , msgName: 'msg' //状态信息的字段名称
             , dataName: 'info' //数据详情的字段名称
         }
-
         //独立页面路由，可随意添加（无需写参数）
-        , indPage: [
+        , indPage: layui.cache.indPage || [
             '/user/login',
             '/user/register',
             '/user/forget'
-        ]
-
-        // 自定义的 layout
-        , layout: [
-            '/common/user/'
-        ]
-
+        ],
+        // 自定义的布局框架
+        layout: layui.cache.layout || []
         //扩展的第三方模块
         , extend: [
             'echarts', //echarts 核心包
             'echartsTheme' //echarts 主题
         ]
-
         //主题配置
         , theme: {
             //配色方案，如果用户未设置主题，第一个将作为默认

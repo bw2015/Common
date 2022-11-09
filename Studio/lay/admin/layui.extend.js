@@ -1,6 +1,7 @@
 ﻿// layuiadmin的擴展方法
 // 常用工具方法封裝
 if (!window["Utils"]) window["Utils"] = new Object();
+if (!window["UI"]) window["UI"] = new Object();
 !function (ns) {
     // 常用方法封装
     ns["wait"] = function (name, data, faildCount) {
@@ -503,10 +504,91 @@ var GolbalSetting = {
             }
         }
     }
-
 })(GolbalSetting);
 
 
+// 页面交互
+!function (ns) {
+
+    if (!ns.diag) {
+        ns.diag = {
+
+            // 获取传入的数据
+            getData: (formElem) => {
+                let container = document.body.querySelector("[lay-diag-data]");
+                if (!container) return null;
+                let data = JSON.parse(container.getAttribute("lay-diag-data"));
+                if (formElem) {
+                    for (let name in data) {
+                        let input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = name;
+                        input.value = data[name];
+                        formElem.appendChild(input);
+                    }
+                }
+                return data;
+            },
+            // 刷新当前面板
+            refresh: () => {
+                let diag = document.body.querySelector(".layui-layer.diag");
+                if (!diag) return;
+                let tab = diag.querySelector("li.layui-this[data-type]");
+                if (tab) tab.click();
+            },
+            // 打开一个模式窗口
+            open: options => {
+                const view = layui.view,
+                    admin = layui.admin,
+                    $ = layui.$;
+
+                admin.popup({
+                    title: options.title,
+                    area: options.area,
+                    shadeClose: false,
+                    id: options.id,
+                    skin: `diag ${options.type}`,
+                    content: "正在加载...",
+                    success: function (layero) {
+                        let viewId = this.id;
+
+                        view(viewId).render(`${options.path}index`, options.data).done(function (e) {
+                            const container = this.container[0],
+                                layerContainer = document.getElementById(options.id),
+                                content = container.querySelector(".layui-tab-content");
+                            let contentId = content.getAttribute("id");
+                            container.setAttribute("lay-diag-data", JSON.stringify(options.data));
+                            if (!contentId) {
+                                contentId = `diag-${new Date().getTime()}`;
+                                content.setAttribute("id", contentId);
+                                content.style.height = `${layerContainer.offsetHeight - 40}px`;
+                            }
+
+                            // 切换方法赋值
+                            $(container).on("click", ".layui-tab-title [data-type]", e => {
+                                const li = e.currentTarget,
+                                    type = li.getAttribute("data-type");
+                                view(contentId).render(`${options.path}${type}`, options.data).done(e => {
+
+                                });
+                            });
+
+                            // 触发点击
+                            let start = null;
+                            if (options.start) start = container.querySelector(`.layui-tab-title > [data-type='${options.start}']`);
+                            if (!start) start = container.querySelector(".layui-tab-title > [data-type]");
+                            if (start) start.click();
+                            if (options.done) {
+                                options.done(this);
+                            }
+                        });
+                    }
+                });
+            }
+        };
+    }
+
+}(UI);
 
 
 // 字符串格式化
@@ -696,13 +778,17 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
     // 通用的状态样式
     ns["status"] = function (type, status) {
         if (!type || !status) return "N/A";
-        var result = null;
-        var name = status;
+        let result = null,
+            name = status;
         if (type.indexOf(".") === -1) {
             status = type;
         } else {
             if (!GolbalSetting.enum[type]) return status;
-            name = GolbalSetting.enum[type][status];
+            if (GolbalSetting.enum[type] instanceof Map) {
+                name = GolbalSetting.enum[type].get(status);
+            } else {
+                name = GolbalSetting.enum[type][status];
+            }
             if (!name) return status;
         }
         result = name;
@@ -799,6 +885,40 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
 
     // 显示来源平台
     ns.platform = function (platform) {
+        if (!platform) return "";
+        let icon = [];
+        if (Array.isArray(platform)) {
+            if (!platform.length) return "";
+            platform.forEach(t => {
+                switch (t) {
+                    case "PC":
+                        icon.push("am-icon-tv");
+                        break;
+                    case "Windows":
+                        icon.push("am-icon-windows");
+                        break;
+                    case "MAC":
+                        icon.push("am-icon-apple");
+                        break;
+                    case "Mobile":
+                        icon.push("am-icon-mobile-phone");
+                        break;
+                    case "IOS":
+                        icon.push("am-icon-apple");
+                        break;
+                    case "Android":
+                        icon.push("am-icon-android");
+                        break;
+                    case "Wechat":
+                        icon.push("am-icon-wechat");
+                        break;
+                    case "APP":
+                        icon.push("iconfont-base-app");
+                        break;
+                }
+            });
+            return icon.map(t => `<i class="${t}"></i>`).join(" ");
+        }
         return platform;
     };
 

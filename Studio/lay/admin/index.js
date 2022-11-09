@@ -73,7 +73,8 @@ layui.extend({
             }
 
             //请求视图渲染
-            view().render(path.join('/')).then(function (res) {
+
+            view(APP_BODY_ID).render(path.join('/')).then(function (res) {
 
                 //遍历页签选项卡
                 var matchTo, tabs = $('#LAY_app_tabsheader>li');
@@ -101,7 +102,7 @@ layui.extend({
                     }
                 }
 
-                this.container = admin.tabsBody(tabsPage.index);
+                if (setter.pageTabs) { this.container = admin.tabsBody(tabsPage.index); }
                 setter.pageTabs || this.container.scrollTop(0); //如果不开启标签页，则跳转时重置滚动条
 
                 //定位当前tabs
@@ -143,7 +144,8 @@ layui.extend({
             var router = layui.router(),
                 container = view(setter.container),
                 pathURL = admin.correctRouter(router.path.join('/')),
-                isIndPage, isLayout, layoutBase, layoutType;
+                isIndPage,
+                layout;
 
             //检查是否属于独立页面
             layui.each(setter.indPage, function (index, item) {
@@ -152,11 +154,11 @@ layui.extend({
                 }
             });
 
+            // 自定义的框架页面
             setter.layout.forEach(item => {
-                let regex = new RegExp(`^${item}`);
-                if (regex.test(pathURL)) {
-                    layoutBase = item;
-                    return isLayout = true;
+                let path = router.path.join("/");
+                if (item.match.test(path)) {
+                    return layout = item;
                 }
             });
 
@@ -170,17 +172,6 @@ layui.extend({
                     admin.pageType = 'alone';
                 });
                 layoutType = null;
-            }
-            //  独立框架页面
-            else if (isLayout) {
-                if (layoutType === layoutBase) {
-                    view("LAY_app_body").render(router.path.join('/'));
-                } else {
-                    container.render(`${layoutBase}layout`).done(() => {
-                        view("LAY_app_body").render(router.path.join('/'));
-                        layoutType = layoutBase;
-                    });
-                }
             }
             else { //后台框架页面
 
@@ -198,7 +189,8 @@ layui.extend({
                 if (admin.pageType === 'console') { //后台主体页
                     renderPage();
                 } else { //初始控制台结构
-                    container.render('layout').done(function () {
+                    let done = () => {
+                        console.log("触发done事件", APP_BODY_ID);
                         renderPage();
                         layui.element.render();
 
@@ -206,14 +198,25 @@ layui.extend({
                             admin.sideFlexible();
                         }
                         admin.pageType = 'console';
+                    };
+                    container.render('layout').done(function () {
+                        if (layout) {
+                            view().render(layout.path).then(() => {
+                                APP_BODY_ID = layout.container;
+                                console.log("触发then事件", APP_BODY_ID);
+                            }).done(done);
+                        } else {
+                            APP_BODY_ID = "LAY_app_body";
+                            done();
+                        }
                     });
                 }
 
             }
         }
-
         ,
-        APP_BODY = '#LAY_app_body',
+        APP_BODY_ID = "LAY_app_body",
+        APP_BODY = `#${APP_BODY_ID}`,
         FILTER_TAB_TBAS = 'layadmin-layout-tabs',
         $ = layui.$,
         $win = $(window);

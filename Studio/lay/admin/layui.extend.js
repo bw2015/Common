@@ -510,6 +510,7 @@ var GolbalSetting = {
 // 页面交互
 !function (ns) {
 
+    // 模式窗口弹出
     if (!ns.diag) {
         ns.diag = {
 
@@ -587,6 +588,66 @@ var GolbalSetting = {
             }
         };
     }
+
+    // 鼠标经过的子菜单弹出
+    ns.submenu = options => {
+        if (!options) options = {};
+        let defaultOptions = {
+            container: null,     //外框容器
+            links: [],      // 触发对象
+            submenus: [],       // 子菜单对象
+            delay: 250,      // 延迟时间
+            attributeName: "data-submenu"   // 容器上的属性名字
+        };
+
+        for (let key in defaultOptions) {
+            if (!options[key]) options[key] = defaultOptions[key];
+        }
+
+        let timeIndex = 0,
+            clearTimeIndex = () => {
+                if (!timeIndex) return;
+                clearTimeout(timeIndex);
+                timeIndex = 0;
+            };
+
+        options.links.forEach((link, index) => {
+            let submenu = options.submenus[index],
+                menuName = link.getAttribute(options.attributeName);
+            if (!menuName) {
+                console.error(`can't find attribute ${options.attributeName} at link`, link);
+                return;
+            }
+
+            link.addEventListener("mouseover", e => {
+                clearTimeIndex();
+                options.container.setAttribute(options.attributeName, menuName);
+            });
+            link.addEventListener("mouseleave", e => {
+                if (timeIndex) return;
+                timeIndex = setTimeout((name) => {
+                    if (options.container.getAttribute(options.attributeName) === name) {
+                        options.container.removeAttribute(options.attributeName);
+                    }
+                    clearTimeIndex();
+                }, options.delay, menuName);
+            });
+
+            submenu.addEventListener("mouseover", e => {
+                clearTimeIndex();
+                options.container.setAttribute(options.attributeName, menuName);
+            });
+
+            submenu.addEventListener("mouseleave", e => {
+                clearTimeIndex();
+                timeIndex = setTimeout((name) => {
+                    if (options.container.getAttribute(options.attributeName) === name) {
+                        options.container.removeAttribute(options.attributeName);
+                    }
+                }, options.delay, menuName);
+            });
+        });
+    };
 
 }(UI);
 
@@ -776,7 +837,7 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
     };
 
     // 通用的状态样式
-    ns["status"] = function (type, status) {
+    ns["status"] = (type, status) => {
         if (!type || !status) return "N/A";
         let result = null,
             name = status;
@@ -803,6 +864,7 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
                 break;
             case "Reject":
             case "Close":
+            case "Faild":
                 style.color = "red";
                 style.icon = "layui-icon layui-icon-close-fill";
                 break;
@@ -832,6 +894,7 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
                 break;
             case "Win":
             case "WinHalf":
+            case "Success":
                 style.color = "green";
                 style.icon = "layui-icon layui-icon-face-smile";
                 break;

@@ -601,7 +601,9 @@
             form.on("submit(" + submit.attr("lay-filter") + ")", options.submit);
         },
         // 扩展的渲染方法
-        render: function (filter) {
+        render: function (filter, options) {
+            if (!options) options = {};
+
             const formElem = document.querySelector(`.layui-form[lay-filter='${filter}']`),
                 formObj = $(formElem);
 
@@ -658,7 +660,9 @@
                     item.setAttribute("readonly", true);
                     laydate.render({
                         elem: item,
-                        type: type
+                        type: type,
+                        //控件选择完毕后的回调 function(value, date, endDate)
+                        done: item.getAttribute("data-done") && options[item.getAttribute("data-done")] || undefined
                     });
                     switch (item.getAttribute("data-date-value")) {
                         case "Today":

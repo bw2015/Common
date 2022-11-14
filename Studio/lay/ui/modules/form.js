@@ -159,7 +159,46 @@ layui.define('layer', function (exports) {
 
                     //密码输入框
                     if (elemForm[0]) {
-                        elemForm[0].querySelectorAll(".layui-input-length")
+                        elemForm[0].querySelectorAll(".layui-input-length").forEach(input => {
+                            let parent = input.parentNode,
+                                length = Number(input.getAttribute("maxlength")) || 6,
+                                code = input.getAttribute("data-code") || "*",
+                                elem = document.createElement("div"),
+                                elemContent = [];
+
+                            elem.className = "layui-input layui-input-length";
+                            for (var i = 0; i < length; i++) {
+                                elemContent.push("<em></em>")
+                            }
+                            elem.innerHTML = elemContent.join("");
+                            parent.appendChild(elem);
+                            parent.classList.add("layui-input-length-container");
+
+                            let elems = elem.querySelectorAll("em"),
+                                show = () => {
+                                    let value = input.value;
+                                    elems.forEach((em, index) => {
+                                        if (index < value.length) {
+                                            em.innerText = code;
+                                        } else {
+                                            em.innerText = "";
+                                        }
+                                    });
+                                };
+
+                            input.addEventListener("keydown", show);
+                            input.addEventListener("keyup", show);
+                            input.setAttribute("readonly", "readonly");
+                            input.addEventListener("focus", e => {
+                                setTimeout(t => {
+                                    t.removeAttribute("readonly");
+                                    t.select();
+                                }, 50, input);
+                            });
+                            input.addEventListener("blur", e => {
+                                input.setAttribute("readonly","readonly");
+                            });
+                        });
                     }
 
 

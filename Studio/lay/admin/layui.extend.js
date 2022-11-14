@@ -649,6 +649,38 @@ var GolbalSetting = {
         });
     };
 
+    // 获取玩法名称的通用方法
+    ns.playCode = (container, options) => {
+        if (!container) container = document.body;
+        if (!options) options = {};
+        let defaultOptions = {
+            url: null, //网关（必填）
+            filter: ".game-playcode[data-game]", // 元素的条件
+            gameAttribute: "data-game"
+        };
+        for (let key in defaultOptions) {
+            if (!options[key]) options[key] = defaultOptions[key];
+        }
+        if (!options.url) {
+            console.error("缺少网关");
+            return;
+        }
+
+        let data = {},
+            elems = new Map();
+
+        container.querySelectorAll(options.filter).forEach(elem => {
+            let game = elem.getAttribute(options.gameAttribute),
+                code = elem.innerText,
+                elemKey = `${game}:${code}`;
+            if (!data[game]) data[game] = [];
+            if (!elems.get(elemKey)) elems.set(elemKey, []);
+            elems.get(elemKey).push(elem);
+            if (!code[game].contains(code)) code[game].push(code);
+        });
+
+
+    }
 }(UI);
 
 

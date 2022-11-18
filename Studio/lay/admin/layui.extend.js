@@ -456,7 +456,7 @@ var GolbalSetting = {
             if (!options) options = {};
             var html = [];
             html.push("<div>");
-            for (var type in options) {
+            for (let type in options) {
                 switch (type) {
                     case "edit":
                         if (typeof options.edit === "string") options.edit = { action: options.edit };
@@ -469,6 +469,17 @@ var GolbalSetting = {
                         html.push("<button class='layui-btn layui-btn-danger layui-btn-xs' lay-event='delete' ");
                         for (var deleteKey in options.delete) html.push("data-" + deleteKey + "='" + options.delete[deleteKey] + "' ");
                         html.push(" title='删除'><i class='am-icon-times'></i></button>");
+                        break;
+                    // 点击按钮请求接口进行刷新并且刷新表格
+                    case "refresh":
+                        {
+                            if (typeof options.refresh === "string") options.refresh = { action: options.refresh };
+                            html.push(`<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="refresh" `);
+                            for (var key in options.refresh) {
+                                html.push(`data-${key}="${options.refresh[key]}" `);
+                            }
+                            html.push(` title="刷新"><i class="am-icon-refresh"></i></button>`);
+                        }
                         break;
                     default:
                         var item = options[type];
@@ -962,6 +973,10 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
             case "Lock":
                 style.color = "red";
                 style.icon = "am-icon-lock";
+                break;
+            case "Exception":
+                style.color = "orange";
+                style.icon = "iconfont-base-bug";
                 break;
         }
         if (style.color && style.icon) {

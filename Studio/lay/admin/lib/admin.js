@@ -246,37 +246,6 @@ layui.define('view', function (exports) {
             });
         }
 
-        //便签
-        , note: function (othis) {
-            var mobile = admin.screen() < 2
-                , note = layui.data(setter.tableName).note;
-
-            events.note.index = admin.popup({
-                title: '便签'
-                , shade: 0
-                , offset: [
-                    '41px'
-                    , (mobile ? null : (othis.offset().left - 250) + 'px')
-                ]
-                , anim: -1
-                , id: 'LAY_adminNote'
-                , skin: 'layadmin-note layui-anim layui-anim-upbit'
-                , content: '<textarea placeholder="内容"></textarea>'
-                , resize: false
-                , success: function (layero, index) {
-                    var textarea = layero.find('textarea')
-                        , value = note === undefined ? '便签中的内容会存储在本地，这样即便你关掉了浏览器，在下次打开时，依然会读取到上一次的记录。是个非常小巧实用的本地备忘录' : note;
-
-                    textarea.val(value).focus().on('keyup', function () {
-                        layui.data(setter.tableName, {
-                            key: 'note'
-                            , value: this.value
-                        });
-                    });
-                }
-            })
-        }
-
         //弹出关于面板
         , about: function () {
             admin.popupRight({
@@ -535,6 +504,7 @@ layui.define('view', function (exports) {
     // 自定义的layout布局
     admin.on("hash(layout)", function (router) {
         document.body.setAttribute("data-hash", router.path.join("/"));
+        console.log(router);
     });
 
     //监听侧边导航点击事件

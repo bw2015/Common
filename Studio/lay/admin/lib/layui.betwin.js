@@ -202,6 +202,19 @@
                             });
                         });
                         break;
+                    // 刷新
+                    case "refresh":
+                        {
+                            betwin.admin.req({
+                                url: action,
+                                data: data,
+                                success: res => {
+                                    e.update(res.info);
+                                    if (BW.callback[callback]) BW.callback[callback](res);
+                                }
+                            });
+                        }
+                        break;
                     default:
                         if (toolFunction) toolFunction.bind(obj)(e);
                         break;

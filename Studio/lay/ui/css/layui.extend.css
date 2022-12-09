@@ -35,7 +35,7 @@ hr.xs { margin: 2px 0px; }
 .layui-form-block.text,
 layui-form-inline.text { padding: 9px 15px; line-height: 20px; }
 
-input[type=image].layui-input-upload { max-height: 42px; border: 1px solid #ccc; border-radius: 4px; vertical-align: middle; }
+input[type=image].layui-input-upload { max-height: 42px; min-height: 24px; border: 1px solid #ccc; border-radius: 4px; vertical-align: middle; }
 
 .layui-form .layui-form-item.hide { display: none; }
 .layui-form .layui-input.layui-input-transparent,
@@ -143,6 +143,10 @@ input[type=checkbox][lay-size='sm'] ~ .layui-form-checkbox { height: 20px; line-
     .layui-text-tip ol { padding-left: 12px; }
         .layui-text-tip ol li { list-style-type: decimal; }
 
+/* 文字超出自动省略号隐藏 */
+.layui-text-hidden { display: inline-block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+
 hr.line { padding: 0px; margin: 0px; }
 fieldset { border: 1px solid #ccc; box-shadow: 2px 2px 2px rgba(0,0,0,.1) inset,-2px -2px 2px rgba(0,0,0,.1) inset; border-radius: 8px; }
     fieldset ~ fieldset { margin-top: 10px; }
@@ -236,6 +240,7 @@ legend { text-shadow: 1px 1px 0px #fff; background: #fff; border-radius: 5px; bo
 /* 货币符号 */
 .currency.CNY::before { content: "￥"; }
 .currency.USD::before { content: "$"; }
+.currency.USDT::before { content: "₮"; }
 .currency.TWD::before { content: "NT$"; }
 .currency.EUR::before { content: "€"; }
 .currency.THB::before { content: "฿"; }
@@ -247,6 +252,17 @@ legend { text-shadow: 1px 1px 0px #fff; background: #fff; border-radius: 5px; bo
 .currency.KRW::before { content: "₩"; }
 .currency.INR::before { content: "₹"; }
 .currency.MYR::before { content: "RM"; }
+
+/* 银行LOGO */
+.bank-icon::before { content: " "; background: url(../../../img/bank/default.png) no-repeat center center; background-size: contain; }
+.bank-icon.ICBC::before { background-image: url(../../../img/bank/ICBC.png); }
+.bank-icon.ABC::before { background-image: url(../../../img/bank/ABC.png); }
+.bank-icon.BOC::before { background-image: url(../../../img/bank/BOC.png); }
+
+.bank-icon.ERC::before { background-image: url(../../../img/bank/ERC.png); }
+.bank-icon.TRC::before { background-image: url(../../../img/bank/TRC.png); }
+.bank-icon.BSC::before { background-image: url(../../../img/bank/BSC.png); }
+
 
 /* 图片上传控件 */
 input[data-upload="paste"] { background-size: contain; background-position: center center; background-repeat: no-repeat; }
@@ -260,3 +276,6 @@ p.layui-btn-group { display: block; }
 
 /* 弹出框 */
 .layui-layer .layui-layer-content .layui-fluid { padding: 0px; }
+
+/* 按钮选中 */
+.layui-btn.layui-btn-primary[checked] { background-color: #5eb95e; color: #fff; border-color: #333; }

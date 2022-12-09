@@ -689,9 +689,26 @@ var GolbalSetting = {
             elems.get(elemKey).push(elem);
             if (!code[game].contains(code)) code[game].push(code);
         });
-
-
     }
+
+    // 选中对象
+    // elems : 列表   elem: 当前对象
+    ns.checked = (elems, elem, options) => {
+        if (!options) options = {};
+        let defaultOptions = {
+            "type": "radio",  // 单选:radio  多选:checkbox
+            "attribute": "checked"  // 属性名
+        };
+        for (let key in defaultOptions) {
+            if (!options[key]) options[key] = defaultOptions[key];
+        }
+
+        elems.forEach(t => {
+            if (t.hasAttribute(options.attribute) && t !== elem) t.removeAttribute(options.attribute);
+        });
+        elem.setAttribute(options.attribute, options.attribute);
+    };
+
 }(UI);
 
 

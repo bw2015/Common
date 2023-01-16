@@ -515,6 +515,35 @@ var GolbalSetting = {
             }
         }
     }
+
+    ns.getLanguage = data => {
+
+        let language = localStorage.getItem("LANGUAGE");
+        if (!language) {
+            switch (navigator.language || navigator.userLanguage) {
+                case "zh-CN":
+                    language = "CHN";
+                    break;
+                case "zh-hk":
+                case "zh-tw":
+                    language = "THN";
+                    break;
+                case "en":
+                case "en-us":
+                    language = "ENG";
+                    break;
+                default:
+                    language = "CHN";
+                    break;
+            }
+        }
+        if (data === undefined) return language;
+
+        if (data[language]) return data[language];
+        if (data["ENG"]) return data["ENG"];
+        return data["CHN"];
+    }
+
 })(GolbalSetting);
 
 
@@ -715,6 +744,14 @@ var GolbalSetting = {
 // 字符串格式化
 if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
 !function (ns) {
+    // 显示金额（带币种）
+    ns.showMoney = (currency, money, chain) => {
+        let result = [`<span class="currency ${currency}" title="${GolbalSetting && GolbalSetting.enum && GolbalSetting.enum["SP.StudioCore.Enums.Currency"] && GolbalSetting.enum["SP.StudioCore.Enums.Currency"].get(currency) || currency}">`,
+        htmlFunction.n(money),
+            `</span>`];
+        return result.join("");
+    };
+
     ns["money"] = function (value) {
         if (!value) return "<label class='layui-text-black'>0.00</label>";
         var num = Number(value);
@@ -804,7 +841,13 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         if (!value) return "0.00";
         var num = Number(value);
         if (isNaN(num)) return value;
-        return num.toFixed(2);
+        let str = num.toString(),
+            index = str.indexOf("."),
+            length = 0;
+        if (index !== -1) {
+            length = str.length - 1 - index;
+        }
+        return num.toFixed(Math.max(length, 2));
     };
 
     // 带三位分割的数字类型输出（保留两位小数）
@@ -1060,6 +1103,16 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         if (currency !== "CNY" && GolbalSetting.exchange && GolbalSetting.exchange[currency]) {
             tips = "";
         }
+    };
+
+    // 鼠标经过的提示
+    ns.laytip = content => {
+        return `<i class='layui-icon layui-icon-about' lay-tips="${content}" lay-offset="-12"></i>`;
+    }
+
+    // 为空提示
+    ns.null = () => {
+        return "<span class='layui-text-gray'>N/A</span>";
     };
 
 }(htmlFunction);

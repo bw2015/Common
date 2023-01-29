@@ -1291,11 +1291,11 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
 
     // 获取上层元素
     Element.prototype.getParent = function (where, parent) {
-        var obj = this;
+        let obj = this;
         if (typeof where === "string") {
-            var query = where;
+            let query = where;
             where = function (dom) {
-                return dom.classList && dom.classList.contains(query);
+                return dom.matchs(query) || (dom.classList && dom.classList.contains(query));
             };
         }
         while (obj) {
@@ -1433,7 +1433,7 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
     // 把元素插入顶部
     Element.prototype.insertChild = function (newElem) {
         var elem = this;
-        var child = elem.querySelector("*");
+        var child = elem.firstElementChild;
         if (child) {
             elem.insertBefore(newElem, child);
         } else {
@@ -1441,6 +1441,21 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         }
         return newElem;
     }
+
+    // 把元素插入兄弟节点的后面
+    Element.prototype.insertAfter = function (newElem) {
+        let elem = this,
+            parent = elem.parentNode;
+
+        if (parent.lastChild == elem) {
+            // 如果最后的节点是目标元素，则直接添加。因为默认是最后
+            parent.appendChild(newElem);
+        } else {
+            parent.insertBefore(newElem, elem.nextSibling);
+            //如果不是，则插入在目标元素的下一个兄弟节点 的前面。也就是目标元素的后面
+        }
+        return newElem;
+    };
 
     Element.prototype.toggleClass = function (className) {
         if (!className) return;
@@ -1760,7 +1775,6 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
     //    return arr.join("&");
     //}
 }();
-
 
 
 if (!window["BW"]) window["BW"] = {};

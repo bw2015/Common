@@ -738,6 +738,91 @@ var GolbalSetting = {
         elem.setAttribute(options.attribute, options.attribute);
     };
 
+    // wangEditor富文本编辑器
+    UI.wangEditor = options => {
+        if (!options) options = {};
+        if (!options.container) options.container = document.body;
+        if (typeof options.container === "string") options.container = document.getElementById(options.container);
+
+        const link = {
+            style: "https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css",
+            js: "https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.min.js"
+        }
+        let style = document.head.querySelector("[data-editor]");
+        if (!style) {
+            style = document.createElement("link");
+            style.href = link.style;
+            style.setAttribute("rel", "stylesheet");
+            style.setAttribute("data-editor", new Date().getTime());
+            document.head.appendChild(style);
+        }
+
+        let insertAfter = (newElement, targetElement) => {
+            var parent = targetElement.parentNode;
+            if (parent.lastChild == targetElement) {
+                // 如果最后的节点是目标元素，则直接添加。因为默认是最后
+                parent.appendChild(newElement);
+            } else {
+                parent.insertBefore(newElement, targetElement.nextSibling);
+                //如果不是，则插入在目标元素的下一个兄弟节点 的前面。也就是目标元素的后面
+            }
+        },
+            loadEditor = (textarea) => {
+                let toolbar = document.createElement("div");
+                toolbar.setAttribute("id", `toolbar-${Math.floor(Math.random() * new Date().getTime())}`);
+                toolbar.style.borderBottom = "1px solid #ccc";
+
+                let area = document.createElement("div");
+                area.setAttribute("id", `area-${Math.floor(Math.random() * new Date().getTime())}`);
+                area.style.height = `${textarea.offsetHeight}px`;
+                area.style.border = "1px solid #ccc";
+
+                insertAfter(toolbar, textarea);
+                insertAfter(area, toolbar);
+
+                textarea.style.display = "none";
+
+                let editor = window.wangEditor.createEditor({
+                    selector: `#${area.id}`,
+                    html: textarea.value,
+                    config: {
+                        "MENU_CONF": {
+                            uploadImage: {
+                                server: layui.setter.getUrl("upload/wangEditor"),
+                                fieldName: 'file1',
+                                base64LimitSize: 2 * 1024 * 1024 // 2M 以下插入 base64
+                            }
+                        },
+                        onChange: e => {
+                            console.log(e);
+                            textarea.value = e.getHtml();
+                        }
+                    }
+                });
+
+                window.wangEditor.createToolbar({
+                    editor: editor,
+                    selector: `#${toolbar.id}`,
+                    mode: "simple",
+                    config: {}
+                });
+
+                console.log(editor.getConfig());
+            };
+
+        if (window.wangEditor) {
+            options.container.querySelectorAll("[data-editor]").forEach(elem => {
+                loadEditor(elem);
+            });
+        } else {
+            layui.$.getScript(link.js, () => {
+                options.container.querySelectorAll("[data-editor]").forEach(elem => {
+                    loadEditor(elem);
+                });
+            });
+        }
+    };
+
 }(UI);
 
 
@@ -779,7 +864,7 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         }
         if (typeof value === "number") {
             var date = new Date(value);
-            return date.formatDate("yyyy-MM-dd hh:mm");
+            return date.formatDate("yyyy-MM-dd hh:mm:ss");
         }
         if (!value || /^1900/.test(value)) return "N/A";
         if (/:\d{2}$/.test(value)) {
@@ -1125,17 +1210,16 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         let width = options.width || 220,
             height = options.height || 220,
             content = this;
-
         if (!options.elem) return "https://api.a8.to:8443/qrcode?content=" + encodeURIComponent(content);
 
         let showCode = () => {
-            new QRCode(options.elem, content);
+            new QRCode(options.elem, content.toString());
         };
 
         if (window["QRCode"]) {
             showCode();
         } else {
-            layui.$.getScript("//studio/js/qrcode/qrcode.min.js", showCode);
+            layui.$.getScript("//studio.a8.to/js/qrcode/qrcode.min.js", showCode);
         }
     };
 
@@ -1295,7 +1379,7 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         if (typeof where === "string") {
             let query = where;
             where = function (dom) {
-                return dom.matchs(query) || (dom.classList && dom.classList.contains(query));
+                return dom.matches(query) || (dom.classList && dom.classList.contains(query));
             };
         }
         while (obj) {

@@ -652,7 +652,11 @@
                         });
                     }
                     select.removeAttribute("data-enum");
-                    if (value) select.value = value;
+                    if (value) {
+                        let option = select.querySelector(`option[value="${value}"]`);
+                        if (option) option.selected = true;
+                        //select.value = value;
+                    }
                 });
             }();
 
@@ -660,8 +664,7 @@
             !function () {
                 layui.each(formObj.find("[data-ui]"), function (index, item) {
                     var name = item.getAttribute("data-ui");
-                    if (!UI[name]) return;
-                    UI[name](item);
+                    UI[name] && UI[name](item);
                 });
             }();
 
@@ -709,7 +712,7 @@
 
             // 创建默认元素
             !function () {
-                var dataSubmit = formObj.find("div[data-submit]");
+                var dataSubmit = formObj.find("[data-submit]");
                 if (dataSubmit.length !== 1) return;
                 var html = [];
                 html.push("<button class='layui-btn" + (formObj.hasClass("layui-form-sm") ? " layui-btn-sm" : "") + "' lay-submit lay-filter='" + filter + "-submit'><i class='am-icon-search'></i> 搜索</button>");
@@ -1292,6 +1295,7 @@
                 title: options.title,
                 content: "正在加载...",
                 area: GolbalSetting.area[options.area],
+                end: options.end,
                 success: function () {
                     view(this.id).render(options.action, options.data);
                 }

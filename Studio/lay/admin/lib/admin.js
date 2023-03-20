@@ -504,7 +504,6 @@ layui.define('view', function (exports) {
     // 自定义的layout布局
     admin.on("hash(layout)", function (router) {
         document.body.setAttribute("data-hash", router.path.join("/"));
-        console.log(router);
     });
 
     //监听侧边导航点击事件

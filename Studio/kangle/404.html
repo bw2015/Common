@@ -1,0 +1,71 @@
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>404 Not Found</title>
+    <style type="text/css">
+        @import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono|Montserrat:700");
+        * { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; box-sizing: border-box; color: inherit; }
+        body { background-image: linear-gradient(120deg, #4f0088 0%, #000000 100%); height: 100vh; }
+        h1 { font-size: 45vw; text-align: center; position: fixed; width: 100vw; z-index: 1; color: #ffffff26; text-shadow: 0 0 50px rgba(0, 0, 0, 0.07); top: 50%; transform: translateY(-50%); font-family: "Montserrat", monospace; }
+        div { background: rgba(0, 0, 0, 0); width: 70vw; position: relative; top: 50%; transform: translateY(-50%); margin: 0 auto; padding: 30px 30px 10px; box-shadow: 0 0 150px -20px rgba(0, 0, 0, 0.5); z-index: 3; }
+        P { color: #f5f5f5; margin: 0 0 20px; font-size: 17px; line-height: 1.2; }
+        span { color: #f0c674; }
+        i { color: #8abeb7; }
+        div a { text-decoration: none; }
+        b { color: #81a2be; }
+        a.avatar { position: fixed; bottom: 15px; right: -100px; animation: slide 0.5s 4.5s forwards; display: block; z-index: 4 }
+            a.avatar img { border-radius: 100%; width: 44px; border: 2px solid white; }
+
+        @keyframes slide {
+            from { right: -100px; transform: rotate(360deg); opacity: 0; }
+            to { right: 15px; transform: rotate(0deg); opacity: 1; }
+        }
+
+        @media screen and (max-width: 640px) {
+            div { width: 90vw; font-size: 12px; }
+                div p { font-size: 12px; margin: 0px 0px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>404</h1>
+    <div>
+        <p>> <span>ERROR CODE</span>: "<i>HTTP 404 Not Found</i>"</p>
+        <p>> <span>ERROR DESCRIPTION</span>: "<i>This is not the web page or file you are looking for.</i>"</p>
+        <p>> <span>错误描述</span>：“<i>这不是您要查找的网页或文件。</i>”</p>
+        <p>> <span>錯誤描述</span>：“<i>這不是您要查找的網頁或文件。</i>”</p>       
+        <p>> <span>DESCRIPCIÓN DEL ERROR </span>: "<i> Esta no es la página web o el archivo que está buscando. </i>" </p>
+        <p>> <span>DESCRIÇÃO DO ERRO </span>: "<i> Esta não é a página da web ou o arquivo que você está procurando. </i>" </p>
+        <p>> <span>DESCRIPTION DE L'ERREUR</span> : "<i>Ce n'est pas la page Web ou le fichier que vous recherchez.</i>"</p>
+        <p>> <span>FEHLERBESCHREIBUNG</span>: "<i>Dies ist nicht die Webseite oder Datei, die Sie suchen.</i>"</p>
+        <p>> <span> ОПИСАНИЕ ОШИБКИ </span>: "<i> Это не та веб-страница или файл, которые вы ищете. </i>" </p>
+        <p >> <span>エラーの説明</span>： "<i>これは探しているWebページまたはファイルではありません。</i>" </p>
+        <p>> <span> MÔ TẢ LỖI </span>: "<i> Đây không phải là trang web hoặc tệp bạn đang tìm kiếm. </i>" </p>
+        <p>> <span>คำอธิบายข้อผิดพลาด</span>: "<i>นี่ไม่ใช่หน้าเว็บหรือไฟล์ที่คุณต้องการ</i>"</p>
+        <p>> <span>오류 설명</span>: "<i>찾고 있는 웹페이지나 파일이 아닙니다.</i>"</p>
+        <p style="direction:rtl">> <span> وصف الخطأ </span>: "<i> هذه ليست صفحة الويب أو الملف الذي تبحث عنه. </i>" </p>
+    </div>
+
+    <script>
+        var str = document.getElementsByTagName('div')[0].innerHTML.toString();
+        var i = 0;
+        document.getElementsByTagName('div')[0].innerHTML = "";
+
+        setTimeout(function () {
+            var se = setInterval(function () {
+                i++;
+                document.getElementsByTagName('div')[0].innerHTML = str.slice(0, i) + "|";
+                if (i == str.length) {
+                    clearInterval(se);
+                    document.getElementsByTagName('div')[0].innerHTML = str;
+                }
+            }, 10);
+        }, 0);
+
+    </script>
+</body>
+</html>

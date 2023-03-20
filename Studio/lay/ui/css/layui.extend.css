@@ -199,6 +199,9 @@ legend { text-shadow: 1px 1px 0px #fff; background: #fff; border-radius: 5px; bo
     .layui-table-view .layui-table[lay-skin=auto] td .layui-table-cell.laytable-cell-sort::after { cursor: move; display: inline-block; font: normal normal normal 1.6rem/1 "FontAwesome", sans-serif; font-size: inherit; text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-transform: translate(0, 0); -ms-transform: translate(0, 0); transform: translate(0, 0); content: "\f047"; }
 .layui-table thead th { text-align: center; }
 
+/* 表格内内容全部显示 */
+.layui-table.layui-table-cell-break ~ .layui-table-view .layui-table-cell { white-space: normal; }
+
 /* 信息展示 */
 .layui-table.layui-table-info { }
     .layui-table.layui-table-info td { text-indent: 0.5em; }
@@ -247,7 +250,11 @@ legend { text-shadow: 1px 1px 0px #fff; background: #fff; border-radius: 5px; bo
 .currency.EUR::before { content: "€"; }
 .currency.THB::before { content: "฿"; }
 .currency.VND::before { content: "₫"; }
+.currency.KVND::before { content: "₫"; }
+.currency.KVND::after { content: "K"; }
 .currency.IDR::before { content: "₨"; }
+.currency.KIDR::before { content: "₨"; }
+.currency.KIDR::after { content: "K"; }
 .currency.PHP::before { content: "₱"; }
 .currency.RUB::before { content: "$"; }
 .currency.JPY::before { content: "¥"; }

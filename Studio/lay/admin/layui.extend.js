@@ -857,14 +857,15 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
         }
     };
 
-    ns["datetime"] = function (value) {
+    ns["datetime"] = function (value, format) {
+        if (!format) format = "yyyy-MM-dd hh:mm:ss";
         if (typeof value === "object" && value instanceof Date) {
             var date = value;
-            return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            return date.format(format);
         }
         if (typeof value === "number") {
             var date = new Date(value);
-            return date.formatDate("yyyy-MM-dd hh:mm:ss");
+            return date.formatDate(format);
         }
         if (!value || /^1900/.test(value)) return "N/A";
         if (/:\d{2}$/.test(value)) {

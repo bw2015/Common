@@ -288,3 +288,12 @@ p.layui-btn-group { display: block; }
 
 /* 按钮选中 */
 .layui-btn.layui-btn-primary[checked] { background-color: #5eb95e; color: #fff; border-color: #333; }
+
+
+
+/* fieldset 的隐藏显示 */
+.fieldset-display { }
+    .fieldset-display legend { cursor: pointer; }
+        .fieldset-display legend::after { content: "\f139"; transition: all .25s; display: inline-block; font: normal normal normal 1.6rem/1 "FontAwesome", sans-serif; font-size: 16px; margin-left: 5px; color: #666; }
+    .fieldset-display.hidden legend::after { transform: rotate(180deg); }
+    .fieldset-display.hidden .fieldset-body { display: none; }

@@ -609,8 +609,8 @@ var GolbalSetting = {
                             $(container).on("click", ".layui-tab-title [data-type]", e => {
                                 const li = e.currentTarget,
                                     type = li.getAttribute("data-type");
-                                view(contentId).render(`${options.path}${type}`, options.data).done(e => {
-
+                                view(contentId).render(`${options.path}${type}`, options.data).done(function (e) {
+                                    if (options.viewDone) options.viewDone.apply(this, [e]);
                                 });
                             });
 

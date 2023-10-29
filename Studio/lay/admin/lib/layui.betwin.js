@@ -1049,6 +1049,7 @@
                                     return;
                                 }
                                 options.done(res);
+                                options.success && options.success(res);
                             }
                             , error: function () {
                                 layer.close(uploadIndex);

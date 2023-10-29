@@ -9,6 +9,8 @@ img { max-width: 100%; }
 hr.sm { margin: 5px 0px; }
 hr.xs { margin: 2px 0px; }
 
+.padding0{ padding:0px !important; }
+
 /* 小一号的表单 */
 .layui-form.layui-form-sm { font-size: 12px; }
     .layui-form.layui-form-sm .layui-input,
@@ -138,6 +140,7 @@ input[type=checkbox][lay-size='sm'] ~ .layui-form-checkbox { height: 20px; line-
 .layui-text-white { color: #fff !important; }
 .layui-bg-white { background-color: #fff; }
 .layui-bg-black { background-color: #333; }
+.layui-bg-gray { background: rgb(246,248,249); background: -moz-linear-gradient(top, rgba(246,248,249,1) 0%, rgba(229,235,238,1) 50%, rgba(215,222,227,1) 51%, rgba(245,247,249,1) 100%); /* FF3.6-15 */ background: -webkit-linear-gradient(top, rgba(246,248,249,1) 0%,rgba(229,235,238,1) 50%,rgba(215,222,227,1) 51%,rgba(245,247,249,1) 100%); /* Chrome10-25,Safari5.1-6 */ background: linear-gradient(to bottom, rgba(246,248,249,1) 0%,rgba(229,235,238,1) 50%,rgba(215,222,227,1) 51%,rgba(245,247,249,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', endColorstr='#f5f7f9',GradientType=0 ); /* IE6-9 */ }
 
 .layui-text-tip { background-color: rgba(255,184,0,.3); color: #FF5722; padding: 10px; font-size: 12px; border: 1px solid #FFB800; }
     .layui-text-tip::before { display: inline-block; font: normal normal normal 1.6rem/1 "FontAwesome", sans-serif; font-size: inherit; text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-transform: translate(0, 0); -ms-transform: translate(0, 0); transform: translate(0, 0); content: "\f071 温馨提示："; }

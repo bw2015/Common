@@ -479,7 +479,7 @@
             if (!data) data = function (e) { return e; };
             form.on("submit(" + filter + ")", function (e) {
                 let formObj = e.form,
-                    postData = data.apply(formObj, [e.field, formObj]);
+                    postData = data.apply(formObj, [e.field, formObj, e.elem]);
                 if (postData === false) return false;
                 let index = layer.load(2, { time: 3000 }),
                     popId = $(formObj).parents("[times]").attr("times"),
@@ -620,6 +620,7 @@
             const formElem = document.querySelector(`.layui-form[lay-filter='${filter}']`),
                 formObj = $(formElem);
 
+            if (!formElem) return;
             // 从search对象传递过来的默认值赋值
             !function () {
                 layui.each(formObj.find("[data-search-value]"), function (index, item) {

@@ -1,0 +1,22 @@
+/* flex 的通用布局 */
+
+.flex {
+  display: -webkit-flex;
+  display: flex;
+}
+/* 内部元素垂直居中 */
+.flex-middle {
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+/* 水平居中 */
+.flex-center{
+    justify-content: center;
+}
+
+/* 横向分布占满整个空间 */
+.flex-between {
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}

@@ -257,7 +257,11 @@ layui.define(['laytpl', 'layer'], function (exports) {
                 view.removeLoad();
 
                 if (that.done) {
-                    that.done(res);
+                    try {
+                        that.done(res);
+                    } catch (ex) {
+                        console.error(ex);
+                    }
                     delete that.done;
                 }
 

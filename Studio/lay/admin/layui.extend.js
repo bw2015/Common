@@ -1605,14 +1605,14 @@ if (!window["htmlFunction"]) window["htmlFunction"] = new Object();
     };
 
     //　数组格式转换
-    Array.prototype.map = function (call) {
-        var list = this;
-        var newList = new Array();
-        for (var i = 0; i < list.length; i++) {
-            newList.push(call(list[i], i));
-        }
-        return newList;
-    };
+    //Array.prototype.map = function (call) {
+    //    var list = this;
+    //    var newList = new Array();
+    //    for (var i = 0; i < list.length; i++) {
+    //        newList.push(call(list[i], i));
+    //    }
+    //    return newList;
+    //};
 
     // 求和计算
     Array.prototype.sum = function (call) {

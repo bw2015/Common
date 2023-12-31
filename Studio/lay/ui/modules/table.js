@@ -706,7 +706,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
             if (options.contentType && options.contentType.indexOf("application/json") == 0) { //提交 json 格式
                 params["where"] = options.where;
                 data = JSON.stringify(params);
-            }else{
+            } else {
                 data = $.extend(params, options.where);
             }
 
@@ -736,7 +736,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
                         options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
                     }
                     that.setColsWidth();
-                    typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+                    try {
+                        typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+                    } catch (ex) {
+                        console.error(ex);
+                    }
                 }
                 , error: function (e, msg) {
                     that.errorView('请求异常，错误提示：' + msg);
@@ -761,7 +765,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
 
             that.renderData(res, curr, res[response.countName]), sort();
             that.setColsWidth();
-            typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+            try {
+                typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+            } catch (ex) {
+                console.error(ex);
+            }
         }
     };
 

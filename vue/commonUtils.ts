@@ -1,5 +1,9 @@
+// H5+ 的应用对象
+declare const plus: any;
+
 // 工具方法
 export default class commonUtils {
+
   // 获取当前浏览器的语种
   static getLanguage(): string {
     let language: string | null = localStorage.getItem('LANGUAGE')
@@ -77,6 +81,7 @@ export default class commonUtils {
   // 秒格式化成为 HH:ss
   static formatSecond(second: number): string {
     if (!second) return '00:00'
+    second =Math.floor(second);
     let minute = Math.floor(second / 60)
     second %= 60
     minute = Math.max(0, minute)
@@ -183,8 +188,9 @@ export default class commonUtils {
   }
 
   static percent(num: number, digi?: number): string {
+    if (isNaN(num)) return "";
     if (!digi) digi = 2
-    return (num * 100).toFixed(2) + '%'
+    return (num * 100).toFixed(digi) + '%'
   }
 
   // 保存页面缓存
@@ -205,6 +211,7 @@ export default class commonUtils {
     }
   }
 
+  // 清除所有的页面缓存
   static removePageCache(): void {
     Object.keys(sessionStorage).forEach((key: string) => {
       if (/^PAGE:CACHE/.test(key)) sessionStorage.removeItem(key)
@@ -216,33 +223,112 @@ export default class commonUtils {
     if (num > 0) return "positive";
     return "negative";
   }
+
+  // 去除html标签
+  static noHtml(content: string): string {
+    if (!content) return "";
+    return content.replace(/<[^>]+>/g, "");
+  }
+
+  // 要跳过的数量
+  static skip<T>(list: T[], count: number): T[] {
+    return list.filter((item: T, index: number) => index >= count);
+  }
+
+  // 数组返回Top
+  static take<T>(list: T[], count: number): T[] {
+    return list.filter((item: T, index: number) => index < count);
+  }
+
+  // 把数组转化成为按Key分组
+  static toMap<TKey, TValue>(list: TValue[], selector: toMapSelector<TKey, TValue>): Map<TKey, TValue[]> {
+    const map = new Map<TKey, TValue[]>();
+    list.forEach((value: TValue) => {
+      const key: TKey = selector(value);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)?.push(value);
+    });
+
+    return map;
+  }
+
+  // 追加分组数据到已有的列表
+  static appendMap<TKey, TValue>(map: Map<TKey, TValue[]>, list: TValue[], selector: toMapSelector<TKey, TValue>): void {
+    list.forEach((item: any) => {
+      const key: TKey = selector(item);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)?.push(item);
+    });
+  }
 }
+
+
+type toMapSelector<TKey, TValue> = (param1: TValue) => TKey;
 
 class platform {
   // 操作系统
-  OS: string
+  OS: string = ''
 
   // 浏览器类型
   browser: string
 
   // 浏览器版本
-  version: string
+  version: string = ''
 
   Android: boolean = false
 
   IOS: boolean = false
 
   // 是否是在封装的APP中
-  APP: boolean = false
+  APP: boolean;
 
   constructor() {
-    this.OS = 'IOS'
-    this.browser = 'Safari'
-    this.version = '1.0'
-    this.IOS = true
+    const userAgent: string = navigator.userAgent.toLowerCase();
+    this.IOS = /iphone/.test(userAgent);
+    this.Android = /android/.test(userAgent);
+    this.APP = /html5plus/.test(userAgent);
+    if (/msie/.test(userAgent)) {
+      this.browser = 'IE';
+    } else if (/firefox/.test(userAgent)) {
+      this.browser = 'Firefox';
+    } else if (/chrome/.test(userAgent)) {
+      this.browser = 'Chrome';
+    } else if (/safari/.test(userAgent) && !/chrome/.test(userAgent)) {
+      this.browser = 'Safari';
+    } else {
+      this.browser = 'Unknow';
+    }
+
+
   }
 
   toString(): string {
     return JSON.stringify(this)
+  }
+}
+
+// 设备信息
+class device {
+
+  //#region 原生设备属性
+
+  // 设备的国际移动设备身份码
+  imei: string = "";
+
+  uuid: string = "";
+
+  //#endregion
+
+  constructor() {
+
+    // 获取设备信息
+    if (plus) {
+      plus.device.getInfo({
+        success: (res: any) => {
+
+        }
+      })
+    }
+
   }
 }

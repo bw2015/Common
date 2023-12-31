@@ -1,0 +1,56 @@
+/* 游戏图标 */
+.game-icon {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  border-radius: 50%;
+}
+
+.game-icon.Chess {
+    background-image: url(../img/game/game-chess.webp);
+}
+.game-icon.Chess.KYChess{
+    background-image: url(../img/game/game-chess-ky.webp);
+}
+.game-icon.Chess.OBChess{
+    background-image: url(../img/game/game-chess-ob.webp);
+}
+
+.game-icon.Lottery {
+    background-image: url(../img/game/game-lottery.webp);
+}
+.game-icon.Lottery.OBLottery{
+    background-image: url(../img/game/game-lottery-ob.webp);
+}
+
+
+.game-icon.Sport {
+    background-image: url(../img/game/game-sport.webp);
+}
+.game-icon.Sport.OBSport{
+    background-image: url(../img/game/game-sport-ob.webp);
+}
+
+
+.game-icon.ESport {
+    background-image: url(../img/game/game-esport.webp);
+}
+.game-icon.ESport.OBESport{
+    background-image: url(../img/game/game-esport-ob.webp);
+}
+
+
+.game-icon.Live {
+    background-image: url(../img/game/game-live.webp);
+}
+.game-icon.Live.OBLive{
+    background-image: url(../img/game/game-live-ob.webp);
+}
+
+
+.game-icon.Slot {
+    background-image: url(../img/game/game-slot.webp);
+}
+.game-icon.Slot.OBSlot{
+    background-image: url(../img/game/game-slot-ob.webp);
+}

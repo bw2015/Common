@@ -301,7 +301,9 @@
                         if (item.total) {
                             var td = $("<td></td>");
                             var templet = item.total;
-                            if (/<div>/.test(templet)) {
+                            if (typeof templet === "function") {
+                                td.html(templet(res.total));
+                            } else if (/<div>/.test(templet)) {
                                 td.html(laytpl(templet).render(res.total));
                             } else if (res.total[templet]) {
                                 td.html(res.total[templet]);
@@ -479,7 +481,17 @@
             if (!data) data = function (e) { return e; };
             form.on("submit(" + filter + ")", function (e) {
                 let formObj = e.form,
+                    postData = false;
+
+                try {
                     postData = data.apply(formObj, [e.field, formObj, e.elem]);
+                } catch (ex) {
+                    layer.alert(ex, {
+                        icon: 2
+                    });
+                    return false;
+                }
+
                 if (postData === false) return false;
                 let index = layer.load(2, { time: 3000 }),
                     popId = $(formObj).parents("[times]").attr("times"),
@@ -493,14 +505,14 @@
                     headers = {};
 
                 if (request.tokenName) {
-                    //自动给参数传入默认 token
+                    // 自动给参数传入默认 token
                     //options.data[request.tokenName] = request.tokenName in options.data
                     //    ? options.data[request.tokenName]
                     //    : (layui.data(setter.tableName)[request.tokenName] || '');
 
                     let tokenName = typeof request.tokenName === "function" ? request.tokenName() : request.tokenName;
 
-                    //自动给 Request Headers 传入 token
+                    // 自动给 Request Headers 传入 token
                     if (request.getToken && typeof request.getToken === "function") {
                         headers[tokenName] = request.getToken(tokenName);
                     } else {
@@ -1010,7 +1022,7 @@
                         }
 
                         //追加自定义扩展
-                        var defaultExts = "jpg|png|gif|bmp|jpeg|svg";
+                        var defaultExts = "jpg|png|gif|bmp|jpeg|svg|webp";
                         if (options.exts) {
                             defaultExts = defaultExts + "|" + options.exts;
                         }

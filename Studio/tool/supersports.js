@@ -17,7 +17,12 @@
 }
 
 let lastTime = 0,
-    sleepTime = Date.now();
+    sleepTime = Date.now(),
+    // 上次采集的结果（如果超过1分钟结果不变，则可能是卡死了，需要重启页面）
+    lastBets = {
+        time: 0,
+        bets: ""
+    }
 // 超级运动会
 const loadData = () => {
     console.clear();
@@ -27,7 +32,7 @@ const loadData = () => {
         location.reload();
         return;
     }
-   
+
     const elems = document.body.querySelectorAll(".innerContainer-K4SP3 [data-key]");
     if (!elems || elems.length === 0) return;
 
@@ -38,7 +43,7 @@ const loadData = () => {
         location.reload();
         return;
     }
-  
+
     const regex = /开始冲刺倒计时：(\d+)s/;
     if (!regex.test(text)) return;
     let coutndownValue = regex.exec(text)[1];
@@ -66,6 +71,18 @@ const loadData = () => {
     }
     if (lastTime != Math.floor(openTime / 1000)) {
         lastTime = Math.floor(openTime / 1000);
+        if (lastBets.bets === data.map(t => t.openNumber).join(",")) {
+            if (lastBets.time !== 0 && lastBets.time < Date.now() - 60 * 1000) {
+                location.reload();
+                return;
+            }
+        } else {
+            lastBets.bets = data.map(t => t.openNumber).join(",");
+            lastBets.time = Date.now();
+        }
+
+        console.log(lastBets);
+
         fetch("https://api.a8.to/Common/API_SaveData?key=YY.SuperSport", {
             method: "POST",
             headers: {
@@ -77,6 +94,7 @@ const loadData = () => {
                 return `<span style="background:linear-gradient(0deg,#ff9e9e -.7%,#fff6ee 99.3%); color:#954700; border-radius: 6px;margin: 6px;display: inline-block; padding: 3px;">时间: ${formatDateTime(new Date(t.openTime))}，号码: ${t.openNumber}</span>`;
             }).join("") + "<hr />" + `耗时：${Date.now() - startTime}ms`;
             sleepTime = Date.now();
+
         });
     }
 };
